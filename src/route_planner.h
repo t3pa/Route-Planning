@@ -17,17 +17,17 @@ class RoutePlanner {
     // The following methods have been made public so we can test them individually.
     void AddNeighbors(RouteModel::Node *current_node);
     float CalculateHValue(RouteModel::Node const *node);
-    std::vector<RouteModel::Node> ConstructFinalPath(RouteModel::Node *);
+    std::vector<RouteModel::Node> ConstructFinalPath(RouteModel::Node *end_node);
     RouteModel::Node *NextNode();
 
   private:
     // Add private variables or methods declarations here.
-    std::vector<RouteModel::Node*> open_list;
-    RouteModel::Node *start_node;
-    RouteModel::Node *end_node;
+    std::vector<RouteModel::Node*> open_list; // list of open Nodes during AStarSearch()
+    RouteModel::Node *start_node;   // the Node that's closest to our start coordinates
+    RouteModel::Node *end_node;     // the Node that's closest to our end coordinates
 
-    float distance = 0.0f;
-    RouteModel &m_Model;
+    float distance = 0.0f;          // distance of the final path after AStarSearch()
+    RouteModel &m_Model;            // underlying map data model
 };
 
 #endif

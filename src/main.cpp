@@ -3,24 +3,26 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#ifndef _MSC_VER
 #include <io2d.h>
-#include "route_model.h"
 #include "render.h"
+#endif
+#include "route_model.h"
 #include "route_planner.h"
 
 using namespace std::experimental;
 
 static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 {   
-    std::ifstream is{path, std::ios::binary | std::ios::ate};
+    std::ifstream is{path, std::ios::binary | std::ios::ate};  // open binary file at the end
     if( !is )
         return std::nullopt;
     
-    auto size = is.tellg();
-    std::vector<std::byte> contents(size);    
+    auto size = is.tellg();  // get file size by current position (at the end)
+    std::vector<std::byte> contents(size);    // create a vector of appropriate size
     
-    is.seekg(0);
-    is.read((char*)contents.data(), size);
+    is.seekg(0); // go back to start of file
+    is.read((char*)contents.data(), size); // read all bytes into vector
 
     if( contents.empty() )
         return std::nullopt;
@@ -55,16 +57,27 @@ int main(int argc, const char **argv)
     // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
+    float start_x, start_y, end_x, end_y;
+    
+    std::cout << "Enter start_x: ";
+    std::cin >> start_x;
+    std::cout << "Enter start_y: ";
+    std::cin >> start_y;
+    std::cout << "Enter end_x: ";
+    std::cin >> end_x;
+    std::cout << "Enter end_y: ";
+    std::cin >> end_y;
 
-    // Build Model.
+    // Build Model (parse the XML data)
     RouteModel model{osm_data};
 
     // Create RoutePlanner object and perform A* search.
-    RoutePlanner route_planner{model, 10, 10, 90, 90};
+    RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
     route_planner.AStarSearch();
 
     std::cout << "Distance: " << route_planner.GetDistance() << " meters. \n";
 
+    #ifndef _MSC_VER
     // Render results of search.
     Render render{model};
 
@@ -76,4 +89,5 @@ int main(int argc, const char **argv)
         render.Display(surface);
     });
     display.begin_show();
+    #endif
 }
