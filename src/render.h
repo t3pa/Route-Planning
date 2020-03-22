@@ -30,7 +30,7 @@ private:
     io2d::interpreted_path PathLine() const;
 
     
-    RouteModel &m_Model;
+    RouteModel &m_Model;  // the route that we want to render
     float m_Scale = 1.f;
     float m_PixelsInMeter = 1.f;
     io2d::matrix_2d m_Matrix;

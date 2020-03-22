@@ -42,6 +42,13 @@ From within the `build` directory, then run `cmake` and `make` as follows:
 cmake ..
 make
 ```
+To build with debug symbols:
+```
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+make
+```
+
+
 ### Running
 The executable will be placed in the `build` directory. From within `build`, you can run the project as follows:
 ```
@@ -52,7 +59,10 @@ Or to specify a map file:
 ./OSM_A_star_search -f ../<your_osm_file.osm>
 ```
 
-## Testing
+### Debugging
+To debug in Visual Studio Code, launch the "(gdb) Launch" configuration (.vscode/launch.json).
+
+### Testing
 
 The testing executable is also placed in the `build` directory. From within `build`, you can run the unit tests as follows:
 ```

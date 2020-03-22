@@ -11,6 +11,8 @@ project(OSM_A_star_search)
 # Set library output path to /lib
 set(LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/lib")
 
+if (NOT MSVC)
+
 # Locate project prerequisites
 find_package(io2d REQUIRED)
 find_package(Cairo)
@@ -20,17 +22,28 @@ find_package(GraphicsMagick)
 set(IO2D_WITHOUT_SAMPLES 1)
 set(IO2D_WITHOUT_TESTS 1)
 
+endif()
+
 # Add the pugixml and GoogleTest library subdirectories
 add_subdirectory(thirdparty/pugixml)
 add_subdirectory(thirdparty/googletest)
 
+
+
+if (NOT MSVC)
 # Add project executable
 add_executable(OSM_A_star_search src/main.cpp src/model.cpp src/render.cpp src/route_model.cpp src/route_planner.cpp)
-
 target_link_libraries(OSM_A_star_search
     PRIVATE io2d::io2d
     PUBLIC pugixml
 )
+else()
+# Add project executable
+add_executable(OSM_A_star_search src/main.cpp src/model.cpp src/route_model.cpp src/route_planner.cpp)
+target_link_libraries(OSM_A_star_search
+    PUBLIC pugixml
+)
+endif()
 
 # Add the testing executable
 add_executable(test test/utest_rp_a_star_search.cpp src/route_planner.cpp src/model.cpp src/route_model.cpp)
